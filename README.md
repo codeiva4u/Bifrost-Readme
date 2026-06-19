@@ -20,6 +20,7 @@ This repository contains the production-ready **Docker Compose** configuration t
 ## 🛠️ Step-by-Step Deployment Instructions
 
 ### Step 1: Add Docker Compose Stack in Coolify
+```
 1. Go to your Coolify Dashboard and create a new **Docker Compose** based application.
 2. Name the stack (e.g., `Bifrost-Production-Stack`).
 3. Paste the following configuration into the Compose box and click **Save**:
