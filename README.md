@@ -25,6 +25,8 @@ This repository contains the production-ready **Docker Compose** configuration t
 3. Paste the following configuration into the Compose box and click **Save**:
 
 ```yaml
+
+---
 version: '3.8'
 services:
   bifrost:
