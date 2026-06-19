@@ -27,7 +27,7 @@ This repository contains the production-ready **Docker Compose** configuration t
 
 ```yaml
 
----
+
 version: '3.8'
 services:
   bifrost:
