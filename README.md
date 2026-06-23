@@ -34,19 +34,24 @@ services:
     image: 'maximhq/bifrost:latest'
     ports:
       - '8080:8080'
-    volumes:
-      - './bifrost_config.json:/app/data/config.json'
     depends_on:
       - redis
       - qdrant
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/api/version"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
     restart: unless-stopped
     networks:
       - coolify
+    configs:
+      - source: bifrost_config
+        target: /app/data/config.json
 
   redis:
     image: 'redis/redis-stack:latest'
-    ports:
-      - '6379:6379'
     volumes:
       - 'redis_data:/data'
     healthcheck:
@@ -60,9 +65,6 @@ services:
 
   qdrant:
     image: 'qdrant/qdrant:latest'
-    ports:
-      - '6333:6333'
-      - '6334:6334'
     volumes:
       - 'qdrant_data:/qdrant/storage'
     healthcheck:
@@ -74,6 +76,24 @@ services:
     networks:
       - coolify
 
+configs:
+  bifrost_config:
+    content: |
+      {
+        "source_of_truth": "config.json",
+        "client": {
+          "initial_pool_size": 100,
+          "max_request_body_size_mb": 100
+        },
+        "vector_store": {
+          "enabled": true,
+          "type": "redis",
+          "config": {
+            "addr": "redis:6379"
+          }
+        }
+      }
+
 networks:
   coolify:
     external: true
@@ -83,7 +103,6 @@ volumes:
     driver: local
   qdrant_data:
     driver: local
-
 ```
 
 ---
